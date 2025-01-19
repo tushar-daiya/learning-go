@@ -1,22 +1,9 @@
 package main
 
-import (
-	"fmt"
-	"strconv"
-)
-
 func main() {
-	sharchain := NewBlockChain()
+	bc := NewBlockChain() //create a new blockchain
+	defer bc.db.Close()   //close the database when the program ends
 
-	sharchain.AddBlock("Send 1 shar to Tushar")
-	sharchain.AddBlock("Send 2 more shar to Tushar")
-
-	for _, block := range sharchain.blocks {
-		fmt.Printf("Prev. hash %x\n", block.PrevBlockHash)
-		fmt.Printf("Data: %s\n", block.Data)
-		fmt.Printf("Hash: %x\n", block.Hash)
-		pow := NewProofOfWork(block)
-		fmt.Printf("PoW: %s\n", strconv.FormatBool(pow.Validate()))
-		fmt.Println()
-	}
+	cli := CLI{bc} //create a new CLI
+	cli.Run()      //run the CLI
 }
